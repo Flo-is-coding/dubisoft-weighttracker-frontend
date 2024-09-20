@@ -27,10 +27,14 @@ function outputValues() {
         .then(response => {
             if (response.status >= 200 && response.status < 300) {
                 // Erfolgreiche Antwort (Statuscode 2xx)
-               hideButton();
+                hideButton();
             } else {
                 // Fehlerhafte Antwort (z.B. Statuscode 4xx oder 5xx)
-                alert("Error submitting data. Status: " + response.status);
+                if (weight < 130) {
+                    alert("Du hast dich heute schon gewogen!")
+                } else {
+                    alert("Du hast dich heute schon gewogen du fette Sau!")
+                }
             }
         })
 }
