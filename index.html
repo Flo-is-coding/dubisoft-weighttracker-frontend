@@ -10,16 +10,20 @@
 </head>
 
 <body>
-<dotlottie-player src="https://lottie.host/208ea239-972f-4640-8813-f6fe7f20c71b/APy5NSK1iq.json"
-                  background="transparent" speed="1" style="width: 200px; height: 200px;" loop
-                  autoplay></dotlottie-player>
-<h1>Dubisoft Weighttracker</h1>
-<input id="weight" name="weight" placeholder="latestWeight" type="text">
-<br>
-<input id="creatin" name="creatin" type="checkbox" value=true>
-<a>Kreatin?</a>
-<br>
-<button type="button" onclick="outputValues()">Gewicht hochladen</button>
+<flex id="column">
+    <dotlottie-player src="https://lottie.host/208ea239-972f-4640-8813-f6fe7f20c71b/APy5NSK1iq.json"
+                      background="transparent" speed="1" style="width: 500px; height: 500px;" loop
+                      autoplay></dotlottie-player>
+    <h1>Dubisoft Weighttracker</h1>
+    <input id="weight" name="weight" placeholder="Wie fett bist du?" type="text">
+    <br>
+    <flex id="row">
+        <input id="creatin" name="creatin" type="checkbox">
+        <a>Kreatin?</a>
+    </flex>
+    <br>
+    <button type="button" onclick="outputValues()">Gewicht hochladen</button>
+</flex>
 <script>
     // let latestWeight = "";
     // console.log(latestWeight);
