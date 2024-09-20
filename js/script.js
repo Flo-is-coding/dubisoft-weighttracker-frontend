@@ -1,7 +1,35 @@
 function outputValues() {
-    const weightValue = document.getElementById("weight").value;
-    const creatinValue = document.getElementById("creatin").checked;
+    const weight = document.getElementById("weight").value;
+    const takesCreatine = document.getElementById("creatin").checked;
 
-    console.log(weightValue);
-    console.log(creatinValue);
+    console.log(weight);
+    console.log(takesCreatine);
+    console.log("starting uploading to server...");
+
+    const data = {
+        weight: weight,
+        takesCreatine: takesCreatine
+    }
+
+    console.log(data);
+
+    fetch("https://dubisoftw-weightracker-backend.azurewebsites.net/api/v1/weightdata", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data) // Konvertiere das JS-Objekt zu JSON
+    })
+        .then(response => response.json()) // Verarbeite die Antwort
+        .then(data => {
+            console.log("Success:", data);
+            alert("Weight data submitted successfully!");
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("There was an error submitting the data.");
+        });
 }
+
+
+
