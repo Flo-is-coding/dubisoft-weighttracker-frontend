@@ -1,3 +1,7 @@
+function hideButton() {
+    const element = document.getElementById("uploadButton");
+    element.style.display = "none"; // Blendet das Element aus
+}
 function outputValues() {
     const weight = document.getElementById("weight").value;
     const takesCreatine = document.getElementById("creatin").checked;
@@ -20,10 +24,15 @@ function outputValues() {
         },
         body: JSON.stringify(data) // Konvertiere das JS-Objekt zu JSON
     })
-        .catch((error) => {
-            console.error("Error:", error);
-            alert("There was an error submitting the data.");
-        });
+        .then(response => {
+            if (response.status >= 200 && response.status < 300) {
+                // Erfolgreiche Antwort (Statuscode 2xx)
+               hideButton();
+            } else {
+                // Fehlerhafte Antwort (z.B. Statuscode 4xx oder 5xx)
+                alert("Error submitting data. Status: " + response.status);
+            }
+        })
 }
 
 
