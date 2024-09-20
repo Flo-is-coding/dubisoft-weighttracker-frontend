@@ -20,11 +20,6 @@ function outputValues() {
         },
         body: JSON.stringify(data) // Konvertiere das JS-Objekt zu JSON
     })
-        .then(response => response.json()) // Verarbeite die Antwort
-        .then(data => {
-            console.log("Success:", data);
-            alert("Weight data submitted successfully!");
-        })
         .catch((error) => {
             console.error("Error:", error);
             alert("There was an error submitting the data.");
