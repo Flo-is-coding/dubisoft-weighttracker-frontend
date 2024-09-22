@@ -5,14 +5,17 @@ function hideButton() {
 function outputValues() {
     const weight = document.getElementById("weight").value;
     const takesCreatine = document.getElementById("creatin").checked;
+    const tookShit = document.getElementById("shit").checked;
 
     console.log(weight);
     console.log(takesCreatine);
+    console.log(tookShit);
     console.log("starting uploading to server...");
 
     const data = {
         weight: weight,
-        takesCreatine: takesCreatine
+        takesCreatine: takesCreatine,
+        tookShit: tookShit
     }
 
     console.log(data);
