@@ -2,7 +2,7 @@ let clickCount = 0;
 document.getElementById('lottie_title').addEventListener('click', function() {
     clickCount++;
     if (clickCount === 5) {
-        this.src = 'https://lottie.host/208ea239-972f-4640-8813-f6fe7f20c71b/APy5NSK1iq.json';
+        this.load = 'https://lottie.host/208ea239-972f-4640-8813-f6fe7f20c71b/APy5NSK1iq.json';
         clickCount = 0; // Zähler zurücksetzen
     }
 });
