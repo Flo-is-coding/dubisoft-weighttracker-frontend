@@ -1,5 +1,8 @@
 let predictions;
+let streak;
 let clickCount = 0;
+
+loadStreakData();
 
 document.getElementById('lottie_title').addEventListener('click', function () {
     clickCount++;
@@ -22,6 +25,20 @@ async function loadPredictions() {
     console.log(predictions);// Hier kannst du die Daten verwenden
 }
 
+async function loadStreakData() {
+    const response = await fetch('https://dubisoftw-weightracker-backend.azurewebsites.net/api/v1/streak', {
+        method: 'GET', // Die HTTP-Methode
+        headers: {
+            'Content-Type': 'application/json', // Header für JSON
+        },
+    });
+
+    // Daten als JSON parsen
+    streak = await response.json();
+    displayStreak();
+    console.log(streak);// Hier kannst du die Daten verwenden
+}
+
 function displayPrediction() {
     const hasTakenAShitBeforeWeighing = document.getElementById("shit").checked;
     const element = document.getElementById("uploadButton");
@@ -32,11 +49,11 @@ function displayPrediction() {
     }
 }
 
-async function fetchPredictionsAndUploadInputs() {
+async function fetchPredictionsAndUploadInputsAndAdjustStreak() {
     await loadPredictions();
-    uploadToBackend();
-    displayPrediction();
-
+    await uploadToBackend();
+    await displayPrediction();
+    loadStreakData();
 }
 
 async function uploadToBackend() {
@@ -74,5 +91,14 @@ async function uploadToBackend() {
         })
 }
 
+function displayStreak() {
+    const streak_display_h3 = document.getElementById("streak_text");
+    const flame = document.getElementById("streak_flame");
+    streak_display_h3.textContent = streak.currentStreak + " Tage";
+
+    if (streak.streakActive) {
+        streak_flame.src = "assets/streak_flame_true.png";
+    }
+}
 
 

@@ -20,7 +20,11 @@
 
 <body>
 <flex id="column">
-    <dotlottie-player id="lottie_title"src="https://lottie.host/dbac1d32-16f0-4141-aa8c-72f6eb2f1e4e/zKymMWzXiv.json"
+    <flex id="row_streak">
+        <img id="streak_flame" src="assets/streak_flame_false.png">
+        <h3 id="streak_text"></h3>
+    </flex>
+    <dotlottie-player id="lottie_title" src="https://lottie.host/dbac1d32-16f0-4141-aa8c-72f6eb2f1e4e/zKymMWzXiv.json"
                       background="transparent" speed="1" style="width: 200px; height: 200px;" loop
                       autoplay></dotlottie-player>
     <h1>Weighttracker</h1>
@@ -35,7 +39,7 @@
         <a>Geschissen?</a>
     </flex>
     <br>
-    <button id="uploadButton" type="button" onclick="fetchPredictionsAndUploadInputs()">Gewicht hochladen</button>
+    <button id="uploadButton" type="button" onclick="fetchPredictionsAndUploadInputsAndAdjustStreak()">Gewicht hochladen</button>
 </flex>
 
 </body>
