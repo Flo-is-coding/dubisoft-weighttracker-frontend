@@ -41,7 +41,6 @@
     <button id="uploadButton" type="button" onclick="fetchPredictionsAndUploadInputsAndAdjustStreak()">Gewicht hochladen</button>
 
     <!-- Graph Section -->
-    <h2>Weight Graph</h2>
     <div id="weightGraph" style="width: 100%; height: 400px;"></div>
 </flex>
 
@@ -65,13 +64,7 @@
 
         // ECharts configuration
         const option = {
-            title: {
-                text: 'Weight Progress',
-                left: 'center',
-                textStyle: {
-                    fontSize: 24
-                }
-            },
+
             tooltip: {
                 trigger: 'axis',
                 formatter: '{b}: {c} kg'
