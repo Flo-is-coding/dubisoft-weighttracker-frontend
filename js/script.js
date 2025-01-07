@@ -11,6 +11,87 @@ document.getElementById('lottie_title').addEventListener('click', function () {
         clickCount = 0; // Zähler zurücksetzen
     }
 });
+async function fetchAndRenderGraph() {
+        const response = await fetch('https://dubisoftw-weightracker-backend.azurewebsites.net/api/v1/weightdata'); // Adjust this URL if needed
+        const data = await response.json();
+
+        console.log("Printing Plot Data");
+
+        // Prepare data for ECharts
+        const dates = data.map(entry => new Date(entry.recordedAt).toLocaleDateString());
+        const weights = data.map(entry => entry.weight);
+
+        // Calculate min and max for y-axis
+        const minWeight = Math.min(...weights);
+        const maxWeight = Math.max(...weights);
+
+        // Initialize ECharts instance
+        const chartDom = document.getElementById('weightGraph');
+        const myChart = echarts.init(chartDom);
+
+        // ECharts configuration
+        const option = {
+
+            tooltip: {
+                trigger: 'axis',
+                formatter: '{b}: {c} kg'
+            },
+            xAxis: {
+                type: 'category',
+                data: dates,
+                axisLabel: {
+                    show: false // Hide x-axis labels
+                },
+                axisLine: {
+                    show: false // Hide x-axis line
+                },
+                splitLine: {
+                    show: false // Remove x-axis grid
+                }
+            },
+            yAxis: {
+                type: 'value',
+                min: minWeight - 1, // Add slight padding below the min value
+                max: maxWeight + 1, // Add slight padding above the max value
+                axisLabel: {
+                    show: false // Hide y-axis labels
+                },
+                splitLine: {
+                    show: false // Remove background grid
+                }
+            },
+            dataZoom: [
+                {
+                    type: 'inside', // Enable zooming inside the chart
+                    start: 0,
+                    end: 100
+                },
+                {
+                    type: 'slider', // Enable zooming via slider
+                    start: 0,
+                    end: 100
+                }
+            ],
+            series: [
+                {
+                    data: weights,
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        color: 'blue',
+                        width: 3
+                    },
+                    symbolSize: 8
+                }
+            ]
+        };
+
+        // Render the chart
+        myChart.setOption(option);
+
+        // Make chart responsive
+        window.addEventListener('resize', myChart.resize);
+    }
 
 async function loadPredictions() {
     const response = await fetch('https://dubisoftw-weightracker-backend.azurewebsites.net/api/v1/prediction', {
@@ -50,9 +131,12 @@ function displayPrediction() {
 }
 
 async function fetchPredictionsAndUploadInputsAndAdjustStreak() {
+
     await loadPredictions();
     await uploadToBackend();
     await displayPrediction();
+    fetchAndRenderGraph();
+
     loadStreakData();
 }
 
