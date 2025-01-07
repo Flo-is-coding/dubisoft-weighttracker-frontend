@@ -7,7 +7,7 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script src="js/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script> <!-- Include Plotly.js -->
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
     <title>Weight Tracker</title>
@@ -42,7 +42,7 @@
 
     <!-- Graph Section -->
     <h2>Weight Graph</h2>
-    <canvas id="weightGraph" width="400" height="200"></canvas>
+    <div id="weightGraph" style="width: 100%; height: 400px;"></div>
 </flex>
 
 <script>
@@ -51,48 +51,34 @@
         const response = await fetch('https://dubisoftw-weightracker-backend.azurewebsites.net/api/v1/weightdata'); // Adjust this URL if needed
         const data = await response.json();
 
-
-        // Prepare data for Chart.js
-        const labels = data.map(entry => new Date(entry.recordedAt).toLocaleDateString());
+        // Prepare data for Plotly
+        const dates = data.map(entry => new Date(entry.recordedAt).toLocaleDateString());
         const weights = data.map(entry => entry.weight);
 
-        // Create the chart
-        const ctx = document.getElementById('weightGraph').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Weight Over Time',
-                    data: weights,
-                    borderColor: 'blue',
-                    tension: 0.3,
-                    fill: false
-                }]
+        const trace = {
+            x: dates,
+            y: weights,
+            mode: 'lines+markers',
+            name: 'Weight Over Time',
+            line: { shape: 'spline', color: 'blue' },
+            marker: { size: 6 }
+        };
+
+        const layout = {
+            title: 'Weight Progress',
+            xaxis: {
+                title: 'Date',
+                showgrid: true
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Weight (kg)'
-                        }
-                    }
-                }
-            }
-        });
+            yaxis: {
+                title: 'Weight (kg)',
+                showgrid: true
+            },
+            responsive: true
+        };
+
+        // Render the graph with Plotly
+        Plotly.newPlot('weightGraph', [trace], layout);
     }
 
     // Call the function to fetch and render the graph
