@@ -7,15 +7,14 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
     <title>Weight Tracker</title>
 
-    <!-- Favicon einfügen -->
+    <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-    <!-- Apple Touch Icon für iOS -->
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-
 </head>
 
 <body>
@@ -40,7 +39,65 @@
     </flex>
     <br>
     <button id="uploadButton" type="button" onclick="fetchPredictionsAndUploadInputsAndAdjustStreak()">Gewicht hochladen</button>
+
+    <!-- Graph Section -->
+    <h2>Weight Graph</h2>
+    <canvas id="weightGraph" width="400" height="200"></canvas>
 </flex>
+
+<script>
+    // Fetch data from the API and render the graph
+    async function fetchAndRenderGraph() {
+        const response = await fetch('https://dubisoftw-weightracker-backend.azurewebsites.net/api/v1/weightdata'); // Adjust this URL if needed
+        const data = await response.json();
+
+
+        // Prepare data for Chart.js
+        const labels = data.map(entry => new Date(entry.recordedAt).toLocaleDateString());
+        const weights = data.map(entry => entry.weight);
+
+        // Create the chart
+        const ctx = document.getElementById('weightGraph').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Weight Over Time',
+                    data: weights,
+                    borderColor: 'blue',
+                    tension: 0.3,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Weight (kg)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Call the function to fetch and render the graph
+    fetchAndRenderGraph();
+</script>
 
 </body>
 
