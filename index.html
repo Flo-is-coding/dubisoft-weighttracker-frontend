@@ -80,7 +80,13 @@
                 type: 'category',
                 data: dates,
                 axisLabel: {
-                    rotate: 45
+                    show: false // Hide x-axis labels
+                },
+                axisLine: {
+                    show: false // Hide x-axis line
+                },
+                splitLine: {
+                    show: false // Remove x-axis grid
                 }
             },
             yAxis: {
@@ -88,12 +94,24 @@
                 min: minWeight - 1, // Add slight padding below the min value
                 max: maxWeight + 1, // Add slight padding above the max value
                 axisLabel: {
-                    show: false // Hide labels
+                    show: false // Hide y-axis labels
                 },
                 splitLine: {
                     show: false // Remove background grid
                 }
             },
+            dataZoom: [
+                {
+                    type: 'inside', // Enable zooming inside the chart
+                    start: 0,
+                    end: 100
+                },
+                {
+                    type: 'slider', // Enable zooming via slider
+                    start: 0,
+                    end: 100
+                }
+            ],
             series: [
                 {
                     data: weights,
