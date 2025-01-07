@@ -7,7 +7,7 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script src="js/script.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script> <!-- Include Plotly.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.0/echarts.min.js"></script> <!-- Include ECharts -->
     <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 
     <title>Weight Tracker</title>
@@ -46,39 +46,73 @@
 </flex>
 
 <script>
-    // Fetch data from the API and render the graph
+    // Fetch data from the API and render the graph using ECharts
     async function fetchAndRenderGraph() {
         const response = await fetch('https://dubisoftw-weightracker-backend.azurewebsites.net/api/v1/weightdata'); // Adjust this URL if needed
         const data = await response.json();
 
-        // Prepare data for Plotly
+        // Prepare data for ECharts
         const dates = data.map(entry => new Date(entry.recordedAt).toLocaleDateString());
         const weights = data.map(entry => entry.weight);
 
-        const trace = {
-            x: dates,
-            y: weights,
-            mode: 'lines+markers',
-            name: 'Weight Over Time',
-            line: { shape: 'spline', color: 'blue' },
-            marker: { size: 6 }
+        // Calculate min and max for y-axis
+        const minWeight = Math.min(...weights);
+        const maxWeight = Math.max(...weights);
+
+        // Initialize ECharts instance
+        const chartDom = document.getElementById('weightGraph');
+        const myChart = echarts.init(chartDom);
+
+        // ECharts configuration
+        const option = {
+            title: {
+                text: 'Weight Progress',
+                left: 'center',
+                textStyle: {
+                    fontSize: 24
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: '{b}: {c} kg'
+            },
+            xAxis: {
+                type: 'category',
+                data: dates,
+                axisLabel: {
+                    rotate: 45
+                }
+            },
+            yAxis: {
+                type: 'value',
+                min: minWeight - 1, // Add slight padding below the min value
+                max: maxWeight + 1, // Add slight padding above the max value
+                axisLabel: {
+                    show: false // Hide labels
+                },
+                splitLine: {
+                    show: false // Remove background grid
+                }
+            },
+            series: [
+                {
+                    data: weights,
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        color: 'blue',
+                        width: 3
+                    },
+                    symbolSize: 8
+                }
+            ]
         };
 
-        const layout = {
-            title: 'Weight Progress',
-            xaxis: {
-                title: 'Date',
-                showgrid: true
-            },
-            yaxis: {
-                title: 'Weight (kg)',
-                showgrid: true
-            },
-            responsive: true
-        };
+        // Render the chart
+        myChart.setOption(option);
 
-        // Render the graph with Plotly
-        Plotly.newPlot('weightGraph', [trace], layout);
+        // Make chart responsive
+        window.addEventListener('resize', myChart.resize);
     }
 
     // Call the function to fetch and render the graph
