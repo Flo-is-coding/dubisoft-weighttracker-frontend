@@ -37,6 +37,16 @@
         <a>Kreatin?</a>
         <a>Geschissen?</a>
     </flex>
+    <flex>
+        <label>
+            Stunden:
+            <input type="number" id="hours" name="hours" min="0" max="99" step="1">
+        </label>
+        <label>
+            Minuten:
+            <input type="number" id="minutes" name="minutes" min="0" max="59" step="1">
+        </label>
+    </flex>
     <br>
     <button id="uploadButton" type="button" onclick="fetchPredictionsAndUploadInputsAndAdjustStreak()">Gewicht hochladen</button>
 

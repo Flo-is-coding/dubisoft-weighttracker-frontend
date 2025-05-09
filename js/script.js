@@ -144,6 +144,7 @@ async function uploadToBackend() {
     const weight = document.getElementById("weight").value;
     const takesCreatine = document.getElementById("creatin").checked;
     const hasTakenAShitBeforeWeighing = document.getElementById("shit").checked;
+    const minutesSlept = document.getElementById("hours").value * 60 + document.getElementById("minutes").value;
 
     console.log(weight);
     console.log(takesCreatine);
@@ -151,7 +152,10 @@ async function uploadToBackend() {
     console.log("starting uploading to server...");
 
     const data = {
-        weight: weight, takesCreatine: takesCreatine, hasTakenAShitBeforeWeighing: hasTakenAShitBeforeWeighing
+        weight: weight,
+        takesCreatine: takesCreatine,
+        hasTakenAShitBeforeWeighing: hasTakenAShitBeforeWeighing,
+        minutesSlept: minutesSlept
     }
 
     console.log(data);
